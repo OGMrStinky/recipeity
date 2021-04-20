@@ -9,7 +9,8 @@ class DB {
             $_query,
             $_error = false,
             $_results,
-            $_count = 0;
+            $_count = 0,
+            $_id;
 
     private function __construct() {
         try {
@@ -86,6 +87,7 @@ class DB {
         $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
 
         if(!$this->query($sql, $fields)->error()) {
+            $this->_id = $this->_pdo->lastInsertId();
             return true;
         }
 
@@ -136,5 +138,9 @@ class DB {
 
     public function error() {
         return $this->_error;
+    }
+
+    public function lastId(){
+        return $this->_id;
     }
 }

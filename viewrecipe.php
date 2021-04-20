@@ -13,10 +13,13 @@ if($user->isLoggedIn()) {
         $recipeID = Input::get('recipeid');
         if ($recipeID) {
 ?>
+
     <p><a href="index.php">"Back to list"</a></p>
     <p>recipe for <?php echo($recipeID) ?> goes here</p>
+    
         
-<?php            
+<?php
+            //button to add notes that saves timestamp.  displayed at top of recipe steps            
         }
     }
 
