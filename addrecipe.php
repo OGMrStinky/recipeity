@@ -13,13 +13,24 @@ if (Input::exists()) {
        $recipe = new Recipe();
 
         try {
-            //$recipe->create((array) $_POST);
-            $recipe->create(array(
+          print "<pre>";
+          print_r($_POST);
+          print "</pre>";
+
+          $recipe->create(array(
               'RecipeName' => Input::get('name'),
               'RecipePartsCnt' => 1
             ),$user->data()->id);
-            Redirect::to('index.php');
+          $recipe->addingreds(
+            Input::get('ingIng'),
+            Input::get('ingUnit'),
+            Input::get('ingAmt'),
+            Input::get('ingIsDivided')
+          );
+          $recipe->addsteps(Input::get('instruct'));
+          Redirect::to('index.php');
             
+
         } catch(Exception $e) {
             echo $e->getTraceAsString(), '<br>';
         }

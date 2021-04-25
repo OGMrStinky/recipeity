@@ -29,7 +29,11 @@ class DB {
 
     public function query($sql, $params = array()) {
         $this->_error = false;
-
+        /*print $sql;
+        print "<pre>";
+        print_r($params);
+        print "</pre>";
+        */
         if($this->_query = $this->_pdo->prepare($sql)) {
             $x = 1;
             if(count($params)) {
@@ -66,6 +70,29 @@ class DB {
                 }
             }
 
+        }
+
+        return false;
+    }
+
+    public function insertIngredOrUnit($table, $namefield, $fields = array()) {
+        $keys = array_keys($fields);
+        $values = null;
+        $x = 1;
+
+        foreach($fields as $field) {
+            $values .= '?';
+            if ($x < count($fields)) {
+                $values .= ', ';
+            }
+            $x++;
+        }
+
+        $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$namefield} = '{$fields[$namefield]}'";
+
+        if(!$this->query($sql, $fields)->error()) {
+            $this->_id = $this->_pdo->lastInsertId();
+            return true;
         }
 
         return false;

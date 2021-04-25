@@ -7,7 +7,7 @@ require_once 'core/init.php';
 }*/
 
 $user = new User(); //Current
-
+//https://www.php.net/manual/en/function.nl2br.php to display steps with line breaks
 if($user->isLoggedIn()) {
     if (Input::exists('get')) {
         $recipeID = Input::get('recipeid');
@@ -17,6 +17,7 @@ if($user->isLoggedIn()) {
     <p><a href="index.php">"Back to list"</a></p>
     <p>recipe for <?php echo($recipeID) ?> goes here</p>
     
+
         
 <?php
             //button to add notes that saves timestamp.  displayed at top of recipe steps            

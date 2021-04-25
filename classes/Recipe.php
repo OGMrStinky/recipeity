@@ -5,7 +5,8 @@ class Recipe {
             $_data,
             $_sessionName,
             $_cookieName,
-            $_isLoggedIn;
+            $_isLoggedIn,
+            $_recipeid;
 
     public function __construct() {
         $this->_db = DB::getInstance();
@@ -14,19 +15,65 @@ class Recipe {
 
     }
 
+    public function recipeid(){
+        return $this->recipeid;
+    }
+
+    public function addingreds($ingreds, $units, $amnt, $divides){
+        $i = 0;
+        $unitID = 0;
+        $ingredID = 0;
+        $isdivided = 0;
+        foreach ($ingreds as $ingred) {
+            if($this->_db->insertIngredOrUnit('ingredients', "IngredName", array("IngredName" => $ingred))){
+                $ingredID = $this->_db->lastId();   
+            }
+            if($this->_db->insertIngredOrUnit('units', "UnitName", array("UnitName" => $units[$i]))){
+                $unitID = $this->_db->lastId();
+            }
+            if(is_array($divides)){
+                if(in_array($i, $divides)){$isdivided = 1;}
+            }
+            if($ingredID <> 0 && $unitID <> 0){
+                if($this->_db->insert('recipepartsingreds', array(
+                    "RecipeID" => $this->_recipeid,
+                    "IngredID" => $ingredID,
+                    "UnitsID" => $unitID,
+                    "AmountVal" => $amnt[$i],
+                    "isDivided" => $isdivided
+                )));
+            }
+            $i+=1;
+        }
+    }
+
+    public function addsteps($steps){
+        //RecipeID, StepOrder, StepText
+        if($this->_db->insert('recipesteps', array(
+            "RecipeID" => $this->_recipeid,
+            "StepOrder" => 1,
+            "StepText" => $steps
+        ))){
+            return true;
+        }
+        return false;
+    }
+
     public function create($fields = array(), $user) {
         /*if(!$this->_db->insert('users', $fields)) {
             throw new Exception('Sorry, there was a problem creating your account;');
         }*/
 
         if($this->_db->insert('recipes', $fields)){
-            $RecipeID = $this->_db->lastId();
+            $this->_recipeid = $this->_db->lastId();
             if($this->_db->insert('usersrecipes',array(
                 'UserID' => $user,
-                'RecipeID' => $RecipeID
-            )));
+                'RecipeID' => $this->_recipeid
+            ))){
+                return true;
+            };
         }
-        
+        return false;
         /*
         print $RecipeID;
         print "<pre>";
