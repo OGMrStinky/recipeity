@@ -25,15 +25,16 @@ class Recipe {
         $ingredID = 0;
         $isdivided = 0;
         foreach ($ingreds as $ingred) {
-            if($this->_db->insertIngredOrUnit('ingredients', "IngredName", array("IngredName" => $ingred))){
+            if($this->_db->insertIngredOrUnit('ingredients', $ingred)){
                 $ingredID = $this->_db->lastId();   
             }
-            if($this->_db->insertIngredOrUnit('units', "UnitName", array("UnitName" => $units[$i]))){
+            if($this->_db->insertIngredOrUnit('units', $units[$i])){
                 $unitID = $this->_db->lastId();
             }
             if(is_array($divides)){
                 if(in_array($i, $divides)){$isdivided = 1;}
             }
+            echo("ingredID={$ingredID} and unitID={$unitID}");
             if($ingredID <> 0 && $unitID <> 0){
                 if($this->_db->insert('recipepartsingreds', array(
                     "RecipeID" => $this->_recipeid,
@@ -49,14 +50,19 @@ class Recipe {
 
     public function addsteps($steps){
         //RecipeID, StepOrder, StepText
-        if($this->_db->insert('recipesteps', array(
-            "RecipeID" => $this->_recipeid,
-            "StepOrder" => 1,
-            "StepText" => $steps
-        ))){
-            return true;
+        $success = true;
+        $steparray = explode(PHP_EOL, $steps);
+        foreach ($steparray as $step) {
+                
+            if(!$this->_db->insert('recipesteps', array(
+                "RecipeID" => $this->_recipeid,
+                "StepOrder" => 1,
+                "StepText" => $step
+            ))){
+                $success = false;
+            }
         }
-        return false;
+        return $success;
     }
 
     public function create($fields = array(), $user) {

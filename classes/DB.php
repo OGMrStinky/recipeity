@@ -75,23 +75,28 @@ class DB {
         return false;
     }
 
-    public function insertIngredOrUnit($table, $namefield, $fields = array()) {
-        $keys = array_keys($fields);
-        $values = null;
-        $x = 1;
-
-        foreach($fields as $field) {
-            $values .= '?';
-            if ($x < count($fields)) {
-                $values .= ', ';
+    public function insertIngredOrUnit($table, $value) {
+        if($table == 'units'){
+            $sql = "INSERT INTO {$table} (`UnitName`) VALUES (?) ON DUPLICATE KEY UPDATE UnitName = ?";
+            if(!$this->query($sql, array($value, $value))->error()) {
+                $this->_id = $this->_pdo->lastInsertId();
+                if($this->_id == 0){
+                    if($this->action("SELECT *", "units", array("UnitName", "=", $value))){
+                        $this->_id = $this->first()->UnitID;
+                    }
+                }
             }
-            $x++;
-        }
-
-        $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$namefield} = '{$fields[$namefield]}'";
-
-        if(!$this->query($sql, $fields)->error()) {
-            $this->_id = $this->_pdo->lastInsertId();
+            return true;
+        } else{
+            $sql = "INSERT INTO {$table} (`IngredName`) VALUES (?) ON DUPLICATE KEY UPDATE IngredName = ?";
+            if(!$this->query($sql, array($value, $value))->error()) {
+                $this->_id = $this->_pdo->lastInsertId();
+                if($this->_id == 0){
+                    if($this->action("SELECT *", "ingredients", array("IngredName", "=", $value))){
+                        $this->_id = $this->first()->IngredID;
+                    }
+                }
+            }
             return true;
         }
 

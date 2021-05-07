@@ -13,10 +13,6 @@ if (Input::exists()) {
        $recipe = new Recipe();
 
         try {
-          print "<pre>";
-          print_r($_POST);
-          print "</pre>";
-
           $recipe->create(array(
               'RecipeName' => Input::get('name'),
               'RecipePartsCnt' => 1
@@ -27,6 +23,7 @@ if (Input::exists()) {
             Input::get('ingAmt'),
             Input::get('ingIsDivided')
           );
+
           $recipe->addsteps(Input::get('instruct'));
           Redirect::to('index.php');
             
