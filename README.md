@@ -11,7 +11,7 @@ Tentative Roadmap:
 - [x] No-style recipe list on index
 - [x] No-style addrecipe page
 - [x] BSTest.html testing bootstrap 5 for viewrecipe layout
-- [ ] viewrecipe page diplays recipe
+- [x] viewrecipe page diplays recipe
 - [ ] edit recipe
 - [ ] add styles, logo
 - [ ] #################### MVP complete and ready for use
