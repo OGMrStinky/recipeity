@@ -3,6 +3,7 @@
 require_once 'core/init.php';
 
 $user = new User();
+$recipe = new Recipe();
 
 if(!$user->isLoggedIn()) {
     Redirect::to('index.php');
@@ -10,8 +11,6 @@ if(!$user->isLoggedIn()) {
 
 if (Input::exists()) {
     if(Token::check(Input::get('token'))) {
-       $recipe = new Recipe();
-
         try {
           $recipe->create(array(
               'RecipeName' => Input::get('name'),
@@ -21,7 +20,8 @@ if (Input::exists()) {
             Input::get('ingIng'),
             Input::get('ingUnit'),
             Input::get('ingAmt'),
-            Input::get('ingIsDivided')
+            Input::get('ingIsDivided'),
+            $user->data()->id
           );
 
           $recipe->addsteps(Input::get('instruct'));
@@ -75,8 +75,14 @@ if (Input::exists()) {
 
 </body>
 
+
+<script>
+<?php
+    print($recipe->getUnits($user->data()->id));
+    print($recipe->getIngreds($user->data()->id));
+
+
+?>
+</script>
 <script src="core/scripts.js"></script>
-    
-
-
 </html>

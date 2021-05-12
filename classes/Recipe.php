@@ -19,16 +19,16 @@ class Recipe {
         return $this->recipeid;
     }
 
-    public function addingreds($ingreds, $units, $amnt, $divides){
+    public function addingreds($ingreds, $units, $amnt, $divides, $userID){
         $i = 0;
         $unitID = 0;
         $ingredID = 0;
         $isdivided = 0;
         foreach ($ingreds as $ingred) {
-            if($this->_db->insertIngredOrUnit('ingredients', $ingred)){
+            if($this->_db->insertIngredOrUnit('ingredients', $ingred, $userID)){
                 $ingredID = $this->_db->lastId();   
             }
-            if($this->_db->insertIngredOrUnit('units', $units[$i])){
+            if($this->_db->insertIngredOrUnit('units', $units[$i], $userID)){
                 $unitID = $this->_db->lastId();
             }
             if(is_array($divides)){
@@ -95,6 +95,38 @@ class Recipe {
         
 
         */
+    }
+
+    public function getUnits($userID){
+        //var aUnits = ["oz", "tbsp", "lb", "cup"];
+        $units = $this->_db->get("units", array("UserID", "=", $userID))->results();
+        $sunits = 'var aUnits = ["';
+        $x = 1;
+        foreach($units as $unit) {
+            $sunits .= $unit->UnitName;
+            if ($x < count($units)) {
+                $sunits .= '", "';
+            }
+            $x++;
+        }
+        $sunits .= '"];';
+        return $sunits;
+    }
+
+    public function getIngreds($userID){
+        //var aIngreds = ["beef", "paprika", "celery"];
+        $ingreds = $this->_db->get("ingredients", array("UserID", "=", $userID))->results();
+        $singreds = 'var aIngreds = ["';
+        $x = 1;
+        foreach($ingreds as $ingred) {
+            $singreds .= $ingred->IngredName;
+            if ($x < count($ingreds)) {
+                $singreds .= '", "';
+            }
+            $x++;
+        }
+        $singreds .= '"];';
+        return $singreds;
     }
 
 }

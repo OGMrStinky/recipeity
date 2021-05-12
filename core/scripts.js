@@ -141,7 +141,7 @@
       });
     }
     
-    /*An array containing all the country names in the world:*/
+    /*An array containing all the country names in the world:
     var aUnits = ["oz", "tbsp", "lb", "cup"];
     var aIngreds = ["beef", "paprika", "celery"];
     /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/

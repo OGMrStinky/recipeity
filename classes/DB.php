@@ -75,10 +75,10 @@ class DB {
         return false;
     }
 
-    public function insertIngredOrUnit($table, $value) {
+    public function insertIngredOrUnit($table, $value, $userID) {
         if($table == 'units'){
-            $sql = "INSERT INTO {$table} (`UnitName`) VALUES (?) ON DUPLICATE KEY UPDATE UnitName = ?";
-            if(!$this->query($sql, array($value, $value))->error()) {
+            $sql = "INSERT INTO {$table} (`UnitName`, `UserID`) VALUES (?,?) ON DUPLICATE KEY UPDATE UnitName = ?";
+            if(!$this->query($sql, array($value, $userID, $value))->error()) {
                 $this->_id = $this->_pdo->lastInsertId();
                 if($this->_id == 0){
                     if($this->action("SELECT *", "units", array("UnitName", "=", $value))){
@@ -88,8 +88,8 @@ class DB {
             }
             return true;
         } else{
-            $sql = "INSERT INTO {$table} (`IngredName`) VALUES (?) ON DUPLICATE KEY UPDATE IngredName = ?";
-            if(!$this->query($sql, array($value, $value))->error()) {
+            $sql = "INSERT INTO {$table} (`IngredName`, `UserID`) VALUES (?,?) ON DUPLICATE KEY UPDATE IngredName = ?";
+            if(!$this->query($sql, array($value, $userID, $value))->error()) {
                 $this->_id = $this->_pdo->lastInsertId();
                 if($this->_id == 0){
                     if($this->action("SELECT *", "ingredients", array("IngredName", "=", $value))){

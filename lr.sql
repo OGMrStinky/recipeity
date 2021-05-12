@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2021 at 03:32 PM
+-- Generation Time: May 12, 2021 at 03:28 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -41,6 +41,7 @@ CREATE TABLE `groups` (
 
 CREATE TABLE `ingredients` (
   `IngredID` int(11) UNSIGNED NOT NULL,
+  `UserID` int(11) NOT NULL,
   `IngredName` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -104,6 +105,7 @@ CREATE TABLE `recipesteps` (
 
 CREATE TABLE `units` (
   `UnitID` int(11) UNSIGNED NOT NULL,
+  `UserID` int(11) NOT NULL,
   `UnitName` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
