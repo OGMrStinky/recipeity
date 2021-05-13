@@ -30,7 +30,7 @@ if(!$user->isLoggedIn()) {
   <body>
     <div class="container">
         <div class="navbar" role="navigation">
-            <a class="navbar-brand" href="#">Recipeity</a>
+            <a class="navbar-brand" href="index.php">Recipeity</a>
 
         </div>
 
