@@ -6,7 +6,8 @@ class Recipe {
             $_sessionName,
             $_cookieName,
             $_isLoggedIn,
-            $_recipeid;
+            $_recipeid,
+            $_ismine;
 
     public function __construct() {
         $this->_db = DB::getInstance();
@@ -48,6 +49,11 @@ class Recipe {
         }
     }
 
+    public function updateingreds($ingreds, $units, $amnt, $divides, $userID){
+        $this->_db->delete("recipepartsingreds", array("RecipeID", "=", $this->_recipeid));
+        $this->addingreds($ingreds, $units, $amnt, $divides, $userID);
+    }
+
     public function addsteps($steps){
         //RecipeID, StepOrder, StepText
         $success = true;
@@ -57,12 +63,17 @@ class Recipe {
             if(!$this->_db->insert('recipesteps', array(
                 "RecipeID" => $this->_recipeid,
                 "StepOrder" => 1,
-                "StepText" => $step
+                "StepText" => escape($step)
             ))){
                 $success = false;
             }
         }
         return $success;
+    }
+
+    public function updatesteps($steps){
+        $this->_db->delete("recipesteps", array("RecipeID", "=", $this->_recipeid));
+        $this->addsteps($steps);
     }
 
     public function create($fields = array(), $user) {
@@ -80,21 +91,14 @@ class Recipe {
             };
         }
         return false;
-        /*
-        print $RecipeID;
-        print "<pre>";
-        print_r($fields);
-        print "</pre>";
-        
-        check add units
-        check add ingredients
-        default recipe part to 1
-        add recipe
-        add recipe part
-        add recipe parts ingredients
-        
 
-        */
+    }
+
+    public function updatename($fields){
+        if($this->_db->update('recipes', $this->_recipeid, $fields)){
+            return true;
+        }
+        return false;
     }
 
     public function getUnits($userID){
@@ -103,7 +107,7 @@ class Recipe {
         $sunits = 'var aUnits = ["';
         $x = 1;
         foreach($units as $unit) {
-            $sunits .= $unit->UnitName;
+            $sunits .= escape($unit->UnitName);
             if ($x < count($units)) {
                 $sunits .= '", "';
             }
@@ -113,13 +117,26 @@ class Recipe {
         return $sunits;
     }
 
+    public function checkismine($userid, $recipeid){
+        if(is_null($this->_ismine)){
+            $recipeuser = $this->_db->get("usersrecipes", array("RecipeID", "=", $recipeid))->first();
+            if($userid == $recipeuser->UserID){
+                $this->_recipeid = $recipeid;
+                $this->_ismine = true;
+            }else{
+                $this->_ismine = false;
+            }
+        }
+        return $this->_ismine;
+    }
+
     public function getIngreds($userID){
         //var aIngreds = ["beef", "paprika", "celery"];
         $ingreds = $this->_db->get("ingredients", array("UserID", "=", $userID))->results();
         $singreds = 'var aIngreds = ["';
         $x = 1;
         foreach($ingreds as $ingred) {
-            $singreds .= $ingred->IngredName;
+            $singreds .= escape($ingred->IngredName);
             if ($x < count($ingreds)) {
                 $singreds .= '", "';
             }

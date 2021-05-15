@@ -138,7 +138,11 @@ class DB {
             $x++;
         }
 
-        $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+        if($table == "recipes"){
+            $sql = "UPDATE {$table} SET {$set} WHERE RecipeID = {$id}";
+        }else{
+            $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+        }
 
         if(!$this->query($sql, $fields)->error()) {
             return true;

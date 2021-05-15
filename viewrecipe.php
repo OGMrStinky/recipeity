@@ -52,7 +52,10 @@ if ($recipeID) {
     $sql = "SELECT RecipeID, IngredName, UnitName, AmountVal, isDivided FROM recipepartsingreds LEFT JOIN ingredients ON recipepartsingreds.IngredID = ingredients.IngredID LEFT JOIN units ON recipepartsingreds.UnitsID = units.UnitID WHERE RecipeID=?";
     $ingred_list = $DB->query($sql, array(escape($recipeID)))->results();
     foreach($ingred_list as $ingred){
-        echo("<li>{$ingred->AmountVal} {$ingred->UnitName} {$ingred->IngredName}</li>");
+        $eamnt = escape($ingred->AmountVal);
+        $eunit = escape($ingred->UnitName);
+        $enam = escape($ingred->IngredName);
+        echo("<li>{$eamnt} {$eunit} {$enam}</li>");
     }
             //button to add notes that saves timestamp.  displayed at top of recipe steps            
 }
@@ -66,7 +69,8 @@ if ($recipeID) {
     $sql = "SELECT StepText FROM recipesteps WHERE RecipeID=?";
     $recipetexts = $DB->query($sql, array(escape($recipeID)))->results();
     foreach($recipetexts as $recipetext){
-        echo("<li>{$recipetext->StepText}</li>");
+        $estep = escape($recipetext->StepText);
+        echo("<li>{$estep}</li>");
     }
 }
 ?>

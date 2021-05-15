@@ -12,7 +12,7 @@ Tentative Roadmap:
 - [x] No-style addrecipe page
 - [x] BSTest.html testing bootstrap 5 for viewrecipe layout
 - [x] viewrecipe page diplays recipe
-- [ ] edit recipe
+- [x] edit recipe
 - [ ] add styles, logo
 - [ ] #################### MVP complete and ready for use
 - [ ] enable recipe parts (e.g. marinade and assembly seperated in ingredients and recipe steps
