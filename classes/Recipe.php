@@ -41,7 +41,7 @@ class Recipe {
                     "RecipeID" => $this->_recipeid,
                     "IngredID" => $ingredID,
                     "UnitsID" => $unitID,
-                    "AmountVal" => $amnt[$i],
+                    "AmountVal" => $amnt,
                     "isDivided" => $isdivided
                 )));
             }

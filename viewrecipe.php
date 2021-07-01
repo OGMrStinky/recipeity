@@ -7,6 +7,12 @@ $user = new User(); //Current
 if(!$user->isLoggedIn()) {
     Redirect::to('index.php');
 }
+
+if (!Input::exists('get')) {
+    Redirect::to('index.php');
+}
+
+$recipeID = Input::get('recipeid');
 ?>
 
 <!doctype html>
@@ -22,37 +28,53 @@ if(!$user->isLoggedIn()) {
     <title>Recipeity</title>
   </head>
 
-  <style>
-      .colstuff{
-          max-height: 500px;
-      }
-  </style>
   <body>
-    <div class="container">
-        <div class="navbar" role="navigation">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
             <a class="navbar-brand" href="index.php">Recipeity</a>
-
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="addrecipe.php?recipeid=<?php echo $recipeID ?>">Edit Recipe</a>
+                    </li>
+                    
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hello, <?php echo escape($user->data()->name); ?>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="update.php">Update</a></li>
+                            <li><a class="dropdown-item" href="changepassword.php">Change Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
 
         <div class="container">
-            <div class="row justify-content-around";">
+            <div class="row justify-content-around p-4">
                 <div class="col-md-4 colstuff p-4 border text-light bg-dark overflow-auto">
                     <ul>
 <?php
 
 
 
-if (!Input::exists('get')) {
-    Redirect::to('index.php');
-}
 
-$recipeID = Input::get('recipeid');
 if ($recipeID) {
     $DB = DB::getInstance();
     $sql = "SELECT RecipeID, IngredName, UnitName, AmountVal, isDivided FROM recipepartsingreds LEFT JOIN ingredients ON recipepartsingreds.IngredID = ingredients.IngredID LEFT JOIN units ON recipepartsingreds.UnitsID = units.UnitID WHERE RecipeID=?";
     $ingred_list = $DB->query($sql, array(escape($recipeID)))->results();
     foreach($ingred_list as $ingred){
-        $eamnt = escape($ingred->AmountVal);
+        $eamnt = float2rat(escape($ingred->AmountVal));
+        //$eamnt = escape($ingred->AmountVal);
         $eunit = escape($ingred->UnitName);
         $enam = escape($ingred->IngredName);
         echo("<li>{$eamnt} {$eunit} {$enam}</li>");

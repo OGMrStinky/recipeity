@@ -48,7 +48,7 @@ if (Input::exists()) {
                     'group' => 1
                 ));
 
-                Session::flash('home', 'Welcome ' . Input::get('username') . '! Your account has been registered. You may now log in.');
+                Session::flash('home', 'Welcome ' . Input::get('name') . '! Your account has been registered. You may now log in.');
                 Redirect::to('index.php');
             } catch(Exception $e) {
                 echo $e->getTraceAsString(), '<br>';
@@ -62,27 +62,58 @@ if (Input::exists()) {
 }
 ?>
 
-<form action="" method="post">
-    <div class="field">
-        <label for="name">Name</label>
-        <input type="text" name="name" value="<?php echo escape(Input::get('name')); ?>" id="name">
-    </div>
 
-    <div class="field">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" value="<?php echo escape(Input::get('username')); ?>">
-    </div>
 
-    <div class="field">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-    </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <div class="field">
-        <label for="password_again">Password Again</label>
-        <input type="password" name="password_again" id="password_again" value="">
-    </div>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-    <input type="submit" value="Register">
-</form>
+    <title>Recipeity</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-around p-4">
+          <div class="col-md-4 p-4 border text-light bg-dark">
+            <h1 class="text-center p-4">Recipeity</h1>
+      <form action="" method="post">
+        <div class="form-outline mb-4">
+            <input type="text" name="name" class="form-control" value="<?php echo escape(Input::get('name')); ?>" id="name">
+            <label class="form-label" for="name">Name</label>
+        </div>
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input type="email" name="username" id="username" class="form-control" value="<?php echo escape(Input::get('username')); ?>"/>
+          <label class="form-label" for="username">Email address</label>
+        </div>
+      
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input type="password" name="password" id="password" class="form-control" />
+          <label class="form-label" for="password">Password</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          <input type="password" name="password_again" id="password_again" class="form-control" />
+          <label class="form-label" for="password_again">Password Again</label>
+        </div>
+      
+        <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+        <a href="login.php" id="cancel" name="cancel" class="btn btn-danger btn-block mb-4">Cancel</a>
+      
+
+      </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+  </body>
+</html>
