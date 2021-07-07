@@ -35,13 +35,13 @@ class Recipe {
             if(is_array($divides)){
                 if(in_array($i, $divides)){$isdivided = 1;}
             }
-            echo("ingredID={$ingredID} and unitID={$unitID}");
+            //echo("ingredID={$ingredID} and unitID={$unitID}");
             if($ingredID <> 0 && $unitID <> 0){
                 if($this->_db->insert('recipepartsingreds', array(
                     "RecipeID" => $this->_recipeid,
                     "IngredID" => $ingredID,
                     "UnitsID" => $unitID,
-                    "AmountVal" => $amnt,
+                    "AmountVal" => fracstring2float($amnt[$i]),
                     "isDivided" => $isdivided
                 )));
             }

@@ -3,13 +3,12 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2021 at 03:28 AM
+-- Generation Time: Jul 02, 2021 at 02:01 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -20,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `lr`
 --
+CREATE DATABASE IF NOT EXISTS `lr` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `lr`;
 
 -- --------------------------------------------------------
 
@@ -32,6 +33,14 @@ CREATE TABLE `groups` (
   `name` varchar(20) NOT NULL,
   `permissions` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `permissions`) VALUES
+(1, 'Standard User', ''),
+(2, 'Administrator', '{\r\n\"admin\": 1,\r\n\"moderator\" : 1\r\n}');
 
 -- --------------------------------------------------------
 
@@ -217,7 +226,7 @@ ALTER TABLE `usersrecipes`
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ingredients`

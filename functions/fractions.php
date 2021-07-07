@@ -31,12 +31,13 @@ function float2rat($n, $tolerance = 1.e-6) {
 }
 
 function fracstring2float($s){
-    $input = $s[0];
+    $input = $s;
     //if(is_numeric($s)){return 0;}
     if (preg_match ("/^([0-9]+)$/", $input)) {return $input;}
     if (str_contains($input, ".")) {return $input;}
     $fraction = array('whole' => 0);
     preg_match('/^((?P<whole>\d+)(?=\s))?(\s*)?(?P<numerator>\d+)\/(?P<denominator>\d+)$/', $input, $fraction);
-    $result = $fraction['whole'] + $fraction['numerator']/$fraction['denominator'];
+    if($fraction['whole']==""){$fraction['whole']=0;}
+    $result = $fraction['whole'] + $fraction['numerator'] / $fraction['denominator'];
     return $result;
 }

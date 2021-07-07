@@ -15,10 +15,11 @@ if (Input::exists()) {
             try {
                 if($recipe->checkismine($user->data()->id, Input::get("recipeid") )){
                     $recipe->updatename(array('RecipeName' => Input::get('name')));                   
+                    //print_r(Input::get('ingAmt')); die;
                     $recipe->updateingreds(
                         Input::get('ingIng'),
                         Input::get('ingUnit'),
-                        fracstring2float(Input::get('ingAmt')),
+                        Input::get('ingAmt'),
                         Input::get('ingIsDivided'),
                         $user->data()->id
                     );
@@ -38,7 +39,7 @@ if (Input::exists()) {
                 $recipe->addingreds(
                     Input::get('ingIng'),
                     Input::get('ingUnit'),
-                    fracstring2float(Input::get('ingAmt')),
+                    Input::get('ingAmt'),
                     Input::get('ingIsDivided'),
                     $user->data()->id
                 );
@@ -139,6 +140,7 @@ if ($recipeID) {
         $eamnt = escape($ingred->AmountVal);
         $eunit = escape($ingred->UnitName);
         $eingred = escape($ingred->IngredName);
+        $eamnt = float2rat(escape($ingred->AmountVal));
         print("<div id='{$ingid}' class='row p-1'>
             <div class='col-sm-2'>
             <input type='text' value='{$eamnt}' class='form-control AmntInput' name='ingAmt[]' placeholder='Amount' aria-label='Amount'>
