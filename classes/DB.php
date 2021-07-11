@@ -8,6 +8,7 @@ class DB {
     private $_pdo,
             $_query,
             $_error = false,
+            $_errinfo,
             $_results,
             $_count = 0,
             $_id;
@@ -48,6 +49,7 @@ class DB {
                 $this->_count = $this->_query->rowCount();
             } else {
                 $this->_error = true;
+                $this->_errinfo = $this->_query->errorInfo();
             }
         }
 
@@ -176,6 +178,9 @@ class DB {
         return $this->_error;
     }
 
+    public function errorinfo(){
+        return $this->_errinfo;
+    }
     public function lastId(){
         return $this->_id;
     }

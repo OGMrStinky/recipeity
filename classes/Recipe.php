@@ -35,15 +35,21 @@ class Recipe {
             if(is_array($divides)){
                 if(in_array($i, $divides)){$isdivided = 1;}
             }
-            //echo("ingredID={$ingredID} and unitID={$unitID}");
+            $recipeid = $this->_recipeid;
+            $amtval = fracstring2float($amnt[$i]);
+            //echo("recipeid={$recipeid} and ingredID={$ingredID} and unitID={$unitID} and amountval={$amtval}"); die;
             if($ingredID <> 0 && $unitID <> 0){
-                if($this->_db->insert('recipepartsingreds', array(
-                    "RecipeID" => $this->_recipeid,
+                if(!$this->_db->insert('recipepartsingreds', array(
+                    "RecipeID" => $recipeid,
                     "IngredID" => $ingredID,
                     "UnitsID" => $unitID,
-                    "AmountVal" => fracstring2float($amnt[$i]),
+                    "AmountVal" => $amtval,
                     "isDivided" => $isdivided
-                )));
+                ))){
+                    echo('save failed');
+                    echo("recipeid={$recipeid} and ingredID={$ingredID} and unitID={$unitID} and amountval={$amtval}");
+                    die;;
+                }
             }
             $i+=1;
         }

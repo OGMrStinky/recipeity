@@ -1,6 +1,13 @@
 <?php
 //https://stackoverflow.com/questions/14330713/converting-float-decimal-to-fraction
 //https://stackoverflow.com/questions/1954018/php-convert-decimal-into-fraction-and-back
+
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle) {
+        return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+    }
+}
+
 function float2rat($n, $tolerance = 1.e-6) {
     $w = 0;
     if($n > 1){

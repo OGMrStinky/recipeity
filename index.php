@@ -16,23 +16,30 @@ if(!$user->isLoggedIn()) {
 }
 
 $DB = DB::getInstance();
-$sql = "SELECT * FROM UsersRecipes LEFT JOIN Recipes ON UsersRecipes.RecipeID = Recipes.RecipeID WHERE UserID=?";
+$sql = "SELECT * FROM usersrecipes LEFT JOIN recipes ON usersrecipes.recipeid = recipes.recipeid WHERE userid=?";
 $recipe_list = array();
 if (Input::exists()) {
     if(Token::check(Input::get('token'))) {
         if(Input::get("RecipeName")){
-            $sql .= " AND RecipeName LIKE ?";
-            $recipe_list = $DB->query($sql, array($user->data()->id, "%" . Input::get('RecipeName') . "%"))->results();
+            $sql .= " AND recipename LIKE ?";
+            $DB->query($sql, array($user->data()->id, "%" . Input::get('RecipeName') . "%"));
         } elseif (Input::get("Ingred")){
             $sql = "SELECT recipes.RecipeID, IngredName, RecipeName FROM recipepartsingreds LEFT JOIN ingredients ON recipepartsingreds.IngredID = ingredients.IngredID LEFT JOIN recipes ON recipepartsingreds.RecipeID = recipes.RecipeID WHERE UserID=? AND IngredName LIKE ?";
-            $recipe_list = $DB->query($sql, array($user->data()->id, "%" . Input::get('Ingred') . "%"))->results();
+            $DB->query($sql, array($user->data()->id, "%" . Input::get('Ingred') . "%"));
         } else {
-            $recipe_list = $DB->query($sql, array(escape($user->data()->id)))->results();
+            $DB->query($sql, array(escape($user->data()->id)));
         }
     }
 } else {
-    $recipe_list = $DB->query($sql, array(escape($user->data()->id)))->results();
+    $DB->query($sql, array(escape($user->data()->id)));
 }
+if($DB->error()){
+    print_r($DB->errorinfo());
+    die;
+} else{
+    $recipe_list = $DB->results();
+}
+
 ?>
 
 <!doctype html>
