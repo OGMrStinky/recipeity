@@ -13,6 +13,8 @@ if (!Input::exists('get')) {
 }
 
 $recipeID = Input::get('recipeid');
+$menu = new Menu($user->data()->id);
+$token = Token::generate();
 ?>
 
 <!doctype html>
@@ -59,6 +61,39 @@ $recipeID = Input::get('recipeid');
     </nav>
 
         <div class="container">
+            <div class="row">
+                <div class="col-2 p-2">
+                    <form action="managemenu.php" method="post">
+                        <?php if($menu->isonmenu($recipeID)){
+                            echo '<button type="submit" name="RemoveFromMenu" class="btn btn-danger" type="button">Remove From Menu</button>
+                            <input type="hidden" name="todo" value="RemoveFromMenu">';
+                        } else{
+                            echo '<button type="submit" name="AddToMenu" class="btn btn-success" type="button">Add To Menu</button>
+                            <input type="hidden" name="todo" value="AddToMenu">';
+                        }?>
+                        <input type="hidden" name="token" value="<?php echo $token; ?>">
+                        <input type="hidden" name="recipeid" value="<?php echo $recipeID; ?>">
+                        
+                    </form>
+                </div>
+                <div class="col-4 p-2">
+                    <form action="managemenu.php" method="post">
+                        <?php if($menu->isonmenu($recipeID)){
+                            echo '<button type="submit" name="MarkAsCooked" class="btn btn-primary" type="button">Mark as Cooked</button>';
+                        }else{
+                            echo '<button type="submit" name="MarkAsCooked" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Add to menu to mark cooked" type="button" disabled>Mark as Cooked</button>';
+                        }
+                        ?>
+                        <input type="hidden" name="token" value="<?php echo $token; ?>">
+                        <input type="hidden" name="recipeid" value="<?php echo $recipeID; ?>">
+                        <input type="hidden" name="todo" value="MarkAsCooked">
+                    </form>
+                    <?php if(!$menu->isonmenu($recipeID)){
+                        echo 'Add to menu to mark as cooked';
+                    }
+                    ?>
+                </div>
+            </div>
             <div class="row justify-content-around p-4">
                 <div class="col-md-4 colstuff p-4 border text-light bg-dark overflow-auto">
                     <ul>
@@ -101,5 +136,11 @@ if ($recipeID) {
         </div>
     </div>
     <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+    </script>
   </body>
 </html>

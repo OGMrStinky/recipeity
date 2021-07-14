@@ -3,6 +3,7 @@
 //https://github.com/onetsp/RecipeParser
 //https://developers.google.com/search/docs/data-types/recipe
 //https://codelabs.developers.google.com/codelabs/structured-data/index.html#0
+//cat /var/log/apache2/error.log
 require_once 'core/init.php';
 
 if(Session::exists('home')) {
