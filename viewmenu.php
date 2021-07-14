@@ -3,6 +3,7 @@ require_once 'core/init.php';
 
 
 $user = new User(); //Current
+$menu = new Menu($user->data()->id);
 
 if(!$user->isLoggedIn()) {
     Redirect::to('index.php');
@@ -73,78 +74,26 @@ $recipeID = Input::get('recipeid');
                             </div>
 
                         </div>
-                    
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Recipe Title</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                    
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Long example recipe title to check wrapping</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                   
-                                </div>
-                            </div>
-                        </div>                    
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Recipe Title</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                    
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Recipe Title</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                    
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Recipe Title</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                    
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-10 gy-4">
-                            <h5>Recipe Title</h5>
-                            </div>
-                            <div class="col gy-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                    
-                                </div>
-                            </div>
-
-                        </div>
+                        <?php
+                            $menuitems = $menu->getmenu();
+                            if(count($menuitems) > 0){
+                                foreach($menuitems as $menuitem){
+                                    echo '<div class="row">';
+                                    echo '  <div class="col-10 gy-4">';
+                                    echo "      <h5><a href='viewrecipe.php?recipeid={$menuitem->RecipeID}'>{$menuitem->RecipeName}</a></h5>";
+                                    echo '  </div>';
+                                    echo '  <div class="col gy-4">';
+                                    echo '      <div class="form-check form-switch">';
+                                    echo '          <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>';
+                                    echo '      </div>';
+                                    echo '  </div>';
+                                    echo '</div>';
+                                }
+                            } else{
+                                echo '<h5>Nothing on the menu</h5>';
+                            }
+                        ?>
+                        
 
                     </ul>
                 </div>

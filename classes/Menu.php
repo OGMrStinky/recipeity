@@ -61,4 +61,14 @@ class Menu {
         }
         return false;
     }
+
+    public function getmenu(){
+        $sql = "SELECT Menu.RecipeID, RecipeName FROM Menu LEFT JOIN Recipes ON Menu.RecipeID = Recipes.RecipeID WHERE UserID=? AND CookedOnDate IS NULL";
+        if(!$this->_db->query($sql, array($this->_userid))->error()){
+            return $this->_db->results();
+        } else{
+            echo $this->_db->errorinfo(); die;
+        }
+        return array();
+    }
 }
