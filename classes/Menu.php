@@ -71,4 +71,14 @@ class Menu {
         }
         return array();
     }
+
+    public function getgroceries(){
+        $sql = "SELECT SUM(AmountVal) AS total_amount, UnitName, IngredName FROM Menu LEFT JOIN recipepartsingreds ON Menu.RecipeID = recipepartsingreds.RecipeID LEFT JOIN Units ON Units.UnitID = recipepartsingreds.UnitsID LEFT JOIN Ingredients ON Ingredients.IngredID = recipepartsingreds.IngredID WHERE  Menu.UserID=? AND CookedOnDate IS NULL GROUP BY recipepartsingreds.IngredID, recipepartsingreds.UnitsID ORDER BY recipepartsingreds.IngredID, recipepartsingreds.UnitsID";
+        if(!$this->_db->query($sql, array($this->_userid))->error()){
+            return $this->_db->results();
+        } else{
+            echo $this->_db->errorinfo(); die;
+        }
+        return array();
+    }
 }

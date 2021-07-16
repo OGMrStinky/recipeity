@@ -99,8 +99,15 @@ $recipeID = Input::get('recipeid');
                 </div>
                 <div class="col-md-5 colstuff p-4 border text-light bg-dark overflow-auto">
                     <ul>
-
-
+                        <?php
+                            $groceries = $menu->getgroceries();
+                            if(count($groceries) > 0){
+                                foreach($groceries as $grocery){
+                                    $totamtfrac = float2rat($grocery->total_amount);
+                                    echo "<li>{$totamtfrac} {$grocery->UnitName} {$grocery->IngredName}</li>";
+                                }
+                            }
+                        ?>
 
 
 
