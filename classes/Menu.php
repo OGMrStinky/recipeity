@@ -57,16 +57,18 @@ class Menu {
                 return true;
             }
         } else{
-            echo $this->_db->errorinfo(); die;
+            print_r($this->_db->errorinfo()); die;
+            echo "query failed"; die;
         }
         return false;
     }
 
     public function getmenu(){
-        $sql = "SELECT Menu.RecipeID, RecipeName FROM Menu LEFT JOIN Recipes ON Menu.RecipeID = Recipes.RecipeID WHERE UserID=? AND CookedOnDate IS NULL";
+        $sql = "SELECT Menu.RecipeID, RecipeName FROM Menu LEFT JOIN recipes ON Menu.RecipeID = recipes.RecipeID WHERE UserID=? AND CookedOnDate IS NULL";
         if(!$this->_db->query($sql, array($this->_userid))->error()){
             return $this->_db->results();
         } else{
+            print_r($this->_db->errorinfo()); die;
             echo $this->_db->errorinfo(); die;
         }
         return array();

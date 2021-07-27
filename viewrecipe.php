@@ -107,7 +107,7 @@ if ($recipeID) {
     $sql = "SELECT RecipeID, IngredName, UnitName, AmountVal, isDivided FROM recipepartsingreds LEFT JOIN ingredients ON recipepartsingreds.IngredID = ingredients.IngredID LEFT JOIN units ON recipepartsingreds.UnitsID = units.UnitID WHERE RecipeID=?";
     $ingred_list = $DB->query($sql, array(escape($recipeID)))->results();
     foreach($ingred_list as $ingred){
-        $eamnt = float2rat(escape($ingred->AmountVal));
+        $eamnt = float2rat($ingred->AmountVal);
         //$eamnt = escape($ingred->AmountVal);
         $eunit = escape($ingred->UnitName);
         $enam = escape($ingred->IngredName);
