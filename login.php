@@ -16,7 +16,6 @@ if(Input::exists()) {
 
         if($validate->passed()) {
             $user = new User();
-
             $remember = (Input::get('remember') === 'on') ? true : false;
             $login = $user->login(Input::get('username'), Input::get('password'), $remember);
 
@@ -71,7 +70,7 @@ if(Input::exists()) {
               <input
                 class="form-check-input"
                 type="checkbox"
-                value=""
+                value="on"
                 name="remember" id="remember"
                 
               />

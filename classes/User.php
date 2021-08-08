@@ -65,20 +65,20 @@ class User {
             Session::put($this->_sessionName, $this->data()->id);
         } else {
             $user = $this->find($username);
-
+            
             if ($user) {
-                if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
+                if ($this->data()->password === Hash::make($password, "")) {
                     Session::put($this->_sessionName, $this->data()->id);
-
                     if ($remember) {
                         $hash = Hash::unique();
                         $hashCheck = $this->_db->get('users_session', array('user_id', '=', $this->data()->id));
-
                         if (!$hashCheck->count()) {
-                            $this->_db->insert('users_session', array(
+                            if(!$this->_db->insert('users_session', array(
                                 'user_id' => $this->data()->id,
                                 'hash' => $hash
-                            ));
+                            ))){
+                                print_r($this->_db->errorinfo()); die;
+                            }
                         } else {
                             $hash = $hashCheck->first()->hash;
                         }
@@ -88,9 +88,10 @@ class User {
 
                     return true;
                 }
-                echo Hash::make($password, $this->data()->salt);
+                echo Hash::make($password, "");
                 echo "should be";
                 echo $this->data()->password;
+                die;
             }
         }
         return false;

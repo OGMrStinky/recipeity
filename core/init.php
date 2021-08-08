@@ -10,11 +10,13 @@ $GLOBALS['config'] = array(
         'host' => 'localhost',
         'username' => 'root',
         'password' => '',
+        //'username' => 'admin',
+        //'password' => 'DB3229675',
         'db' => 'lr'
     ),
     'remember' => array(
         'cookie_name' => 'hash',
-        'cookie_expiry' => 604800
+        'cookie_expiry' => 2592000
     ),
     'sessions' => array(
         'session_name' => 'user',
