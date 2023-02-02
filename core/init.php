@@ -8,11 +8,12 @@ session_start();
 $GLOBALS['config'] = array(
     'mysql' => array(
         'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
+        'username' => 'lr_site',
+        'password' => '%2~aAs2~V(#8',
         //'username' => 'admin',
         //'password' => 'DB3229675',
-        'db' => 'lr'
+        'db' => 'lr_prod'
+        //'db' => 'lr'
     ),
     'remember' => array(
         'cookie_name' => 'hash',
@@ -30,6 +31,7 @@ spl_autoload_register(function($class) {
 
 require_once 'functions/sanitize.php';
 require_once 'functions/fractions.php';
+require_once 'functions/scraperecipe.php';
 
 if(Cookie::exists(Config::get('remember/cookie_name')) && !Session::exists(Config::get('sessions/session_name'))) {
     $hash = Cookie::get(Config::get('remember/cookie_name'));

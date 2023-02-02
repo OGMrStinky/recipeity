@@ -56,6 +56,7 @@ class Recipe {
     }
 
     public function updateingreds($ingreds, $units, $amnt, $divides, $userID){
+        //print_r($this->_recipeid);
         $this->_db->delete("recipepartsingreds", array("RecipeID", "=", $this->_recipeid));
         $this->addingreds($ingreds, $units, $amnt, $divides, $userID);
     }

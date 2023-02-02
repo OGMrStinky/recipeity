@@ -142,6 +142,8 @@ class DB {
 
         if($table == "recipes"){
             $sql = "UPDATE {$table} SET {$set} WHERE RecipeID = {$id}";
+        }elseif($table == "units"){
+            $sql = "UPDATE {$table} SET {$set} WHERE UnitID = {$id}";
         }else{
             $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
         }

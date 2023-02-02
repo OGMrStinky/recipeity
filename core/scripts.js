@@ -51,6 +51,10 @@
       /*execute a function when someone writes in the text field:*/
       inp.addEventListener("input", function(e) {
           var a, b, i, val = this.value;
+          /*look for underscore and if found only compare after that*/
+          if (val.indexOf("_")){
+            val = val.substr(val.indexOf("_")+1);
+          }
           /*close any already open lists of autocompleted values*/
           closeAllLists();
           if (!val) { return false;}

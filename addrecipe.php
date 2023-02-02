@@ -30,6 +30,9 @@ if (Input::exists()) {
             } catch (Exception $e) {
                 echo $e->getTraceAsString(), '<br>';
             }
+        }elseif(Input::get("blog_url")){
+            $recipe_parts = scrape(Input::get("blog_url"));
+
         }else{
             try {
                 $recipe->create(array(
@@ -104,10 +107,16 @@ if (Input::exists()) {
     $DB = DB::getInstance();
     $recipeID = Input::get('recipeid');
     if($recipeID){print("<h2 class='text-light'>Edit Recipe</h2>");}else{print("<h2 class='text-light'>Add Recipe</h2>");}
+
 ?>
-                    
+    <button id="btnAddFromBlog" class="btn btn-primary" type="button" onclick="ToggleBlogInput()">Add From Blog</button>  
+    
                     <form autocomplete="off" action="" method="post">
                       <div >
+                        <div id="BlogAddDiv" style="display: none;">
+                            <input type="text" class="form-control" name="blog_url" placeholder="Paste blog URL here" aria-label="Blog URL">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
 <?php
     if($recipeID){
         if($DB->action("SELECT RecipeName", "recipes", array("RecipeID", "=", $recipeID))){
@@ -150,6 +159,53 @@ if ($recipeID) {
             </div>
             <div class='col-sm'>
             <input type='text' value='{$eingred}' class='form-control IngredInput' name='ingIng[]' placeholder='Ingredient' aria-label='Ingredient'>
+            </div>
+            <div class='col-sm-2 form-check'>
+                <input type='checkbox' class='form-check-input IsDivided' name='ingIsDivided[]' id='exampleCheck1'>
+                <label class='form-check-label' for='exampleCheck1'>Divided</label>
+            </div>
+            </div>");
+        $ingredcnt += 1;
+    }
+}elseif($recipe_parts['ingreds']){
+    $sql = "SELECT UnitName FROM units WHERE UserID=?";
+    $units = $DB->query($sql, array($user->data()->id))->results();
+    $units = json_decode(json_encode($units), true);
+    $list_units = array();
+    foreach($units as $unit){
+        $list_units[] = $unit['UnitName'];
+    }
+
+    $sql = "SELECT IngredName FROM ingredients WHERE UserID=?";
+    $ingreds = $DB->query($sql, array($user->data()->id))->results();
+    $ingreds = json_decode(json_encode($ingreds), true);
+    $list_ingreds = array();
+    foreach($ingreds as $ingred){
+        $list_ingreds[] = $ingred['IngredName'];
+    }
+    foreach($recipe_parts['ingreds'] as $ingred){
+        //echo("<li>{$ingred->AmountVal} {$ingred->UnitName} {$ingred->IngredName}</li>");
+        $ingid = "duplicater";
+        if($ingredcnt>0){
+            $ingid .= $ingredcnt;
+        }
+        $eamnt = $ingred['amount'];
+        $eunit = $ingred['unit'];
+        $unitalertstyle = "form-control UnitsInput";
+        if(in_array($eunit, $list_units) == FALSE){$unitalertstyle .= " bg-warning";}
+        $eingred = $ingred['name'];
+        $ingredalertstyle = "form-control IngredInput";
+        if(in_array($eingred, $list_ingreds) == FALSE){$ingredalertstyle .= " bg-warning";}
+        
+        print("<div id='{$ingid}' class='row p-1'>
+            <div class='col-sm-2'>
+            <input type='text' value='{$eamnt}' class='form-control AmntInput' name='ingAmt[]' placeholder='Amount' aria-label='Amount'>
+            </div>
+            <div class='col-sm-2'>
+            <input type='text' value='{$eunit}'class='{$unitalertstyle}' name='ingUnit[]' placeholder='Units' aria-label='Units'>
+            </div>
+            <div class='col-sm'>
+            <input type='text' value='{$eingred}' class='{$ingredalertstyle}' name='ingIng[]' placeholder='Ingredient' aria-label='Ingredient'>
             </div>
             <div class='col-sm-2 form-check'>
                 <input type='checkbox' class='form-check-input IsDivided' name='ingIsDivided[]' id='exampleCheck1'>
@@ -203,6 +259,22 @@ if ($recipeID) {
     //print_r($DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
     //$recsteps = implode(PHP_EOL, $DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
     print("<textarea class='form-control' id='exampleFormControlTextarea1' rows=15 name='instruct' placeholder='Paste instructions here. Each step on its own line.' >{$recsteps}</textarea>");
+}elseif($recipe_parts['instructs']){
+    
+    $recsteps = "";
+    $x = 1;
+    foreach($recipe_parts['instructs'] as $recipetext){
+        $recsteps .= $recipetext;
+        if($x < count ($recipe_parts['instructs'])) {
+            $recsteps .= PHP_EOL;
+        }
+        $x++;
+    }
+    //print_r($DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
+    //$recsteps = implode(PHP_EOL, $DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
+    print("<textarea class='form-control' id='exampleFormControlTextarea1' rows=15 name='instruct' placeholder='Paste instructions here. Each step on its own line.' >{$recsteps}</textarea>");
+    
+    
 }else{
     print("<textarea class='form-control' id='exampleFormControlTextarea1' value='' rows=15 name='instruct' placeholder='Paste instructions here. Each step on its own line.' ></textarea>");
 }
@@ -231,4 +303,14 @@ if ($recipeID) {
 </script>
 <script src="core/scripts.js"></script>
 <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
+<script>
+function ToggleBlogInput() {
+  var x = document.getElementById("BlogAddDiv");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
 </html>
