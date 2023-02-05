@@ -61,8 +61,8 @@ $token = Token::generate();
     </nav>
 
         <div class="container">
-            <div class="row">
-                <div class="col-2 p-2">
+            <div class="crow">
+                <div class="cbtnone">
                     <form action="managemenu.php" method="post">
                         <?php if($menu->isonmenu($recipeID)){
                             echo '<button type="submit" name="RemoveFromMenu" class="btn btn-danger" type="button">Remove From Menu</button>
@@ -76,7 +76,7 @@ $token = Token::generate();
                         
                     </form>
                 </div>
-                <div class="col-4 p-2">
+                <div class="cbtntwo">
                     <form action="managemenu.php" method="post">
                         <?php if($menu->isonmenu($recipeID)){
                             echo '<button type="submit" name="MarkAsCooked" class="btn btn-primary" type="button">Mark as Cooked</button>';
@@ -95,7 +95,7 @@ $token = Token::generate();
                 </div>
             </div>
             <div class="row justify-content-around p-4">
-                <div class="col-md-4 colstuff p-4 border text-light bg-dark overflow-auto">
+                <div class="col-md-4 colstuff p-4 border text-light bg-dark overflow-auto fheight">
                     <ul>
 <?php
 
@@ -118,7 +118,7 @@ if ($recipeID) {
 ?>
                     </ul>
                 </div>
-                <div class="col-md-7 colstuff p-4 border text-light bg-dark overflow-auto">
+                <div class="col-md-7 colstuff p-4 border text-light bg-dark overflow-auto fheight">
                     <ul>
 <?php
 if ($recipeID) {
@@ -142,5 +142,51 @@ if ($recipeID) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)
             })
     </script>
+	<style>
+	
+		.btn{
+				padding: 11px 16px !important;
+		}
+		.crow{
+			    flex-wrap: nowrap;
+			display: flex;
+			margin-top: 16px;
+			    justify-content: center;
+				    gap: 25px;
+		}
+		.cbtnone, .cbtntwo{
+			    width: auto;
+		}
+		.fheight{
+				    height: 66vh;
+			}
+	
+		@media screen and (min-width: 768px) {
+			body{
+				max-height: 100vh;
+				overflow: hidden;
+			}
+		}
+		@media screen and (max-width: 768px) {
+			.fheight{
+				    height: 260px;
+			}
+			.fheight ul{
+				padding: 0;
+			}
+			.crow{
+				display:block
+			}
+			.cbtnone{
+				    margin-bottom: 12px;
+			}
+			.crow .btn{
+				width:100%
+			}
+			.cbtnone, .cbtntwo {
+				text-align: center;
+			}
+		}
+	</style>
   </body>
 </html>
