@@ -78,14 +78,19 @@ if($DB->error()){
         </div>
     </nav>
 
-<div class="container">
-    <ul>
-        <?php 
-            
-            foreach($unit_list as $unit){
-                echo("<li><a href='editunit.php?unitid={$unit->UnitID}'>{$unit->UnitName}<a/></li>");
-            }
-        ?>
-    </ul>
-</div>
+    <div class="container">
+        <ul>
+            <?php 
+                
+                foreach($unit_list as $unit){
+                    echo("<li><a href='editunit.php?unitid={$unit->UnitID}'>{$unit->UnitName}<a/></li>");
+                }
+            ?>
+        </ul>
+        <div  class="row p-2">
+            <a href="editunit.php" id="addunit" name="AddUnit" class="btn btn-primary">Add Unit</a>
+        </div>
+    </div>
+
+</body>
 <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
