@@ -118,7 +118,7 @@ if (Input::exists()) {
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
 <?php
-    if($recipeID){
+    if($recipeID){ 
         if($DB->action("SELECT RecipeName", "recipes", array("RecipeID", "=", $recipeID))){
             $enam = escape($DB->first()->RecipeName);
             print("<input type='text' value='{$enam}' class='form-control' name='name' placeholder='Recipe Name' aria-label='Recipe Name'>");
@@ -168,14 +168,24 @@ if ($recipeID) {
         $ingredcnt += 1;
     }
 }elseif($recipe_parts['ingreds']){
-    $sql = "SELECT UnitName FROM units WHERE UserID=?";
+    //$sql = "SELECT UnitName FROM units WHERE UserID=?";  //update to join table to itself to get aliases
+    $sql = "SELECT unit.UnitName, alias.UnitName AS AliasForName FROM units unit LEFT JOIN units alias ON unit.AliasID = alias.UnitID WHERE unit.UserID=?";
     $units = $DB->query($sql, array($user->data()->id))->results();
     $units = json_decode(json_encode($units), true);
-    $list_units = array();
-    foreach($units as $unit){
+    if($DB->error()){
+        print_r($DB->errorinfo());
+        die;
+    //} else{
+    //    print_r($units);
+        //die;
+    }
+    
+    /*$list_units = array();
+    foreach($units as $unit){   //move this into loop through ingreds
         $list_units[] = $unit['UnitName'];
     }
-
+print_r($list_units);
+die;*/
     $sql = "SELECT IngredName FROM ingredients WHERE UserID=?";
     $ingreds = $DB->query($sql, array($user->data()->id))->results();
     $ingreds = json_decode(json_encode($ingreds), true);
@@ -192,7 +202,25 @@ if ($recipeID) {
         $eamnt = $ingred['amount'];
         $eunit = $ingred['unit'];
         $unitalertstyle = "form-control UnitsInput";
-        if(in_array($eunit, $list_units) == FALSE){$unitalertstyle .= " bg-warning";}
+        //if(in_array($eunit, $list_units) == FALSE){$unitalertstyle .= " bg-warning";}
+        $unitfound = FALSE;
+        //var_dump($units);
+        foreach($units as $unit){
+            //if eunit found we're good
+            //if eunit found AND has alias for, set aliasname
+            //if not found, style as new unit
+            if(strtoupper($eunit)==strtoupper($unit['UnitName'])){
+                $unitfound = TRUE;
+                //var_dump($unit['AliasForName']);
+                if(isset($unit['AliasForName'])){
+                    $eunit = $unit['AliasForName'];
+                }
+                break;
+            }
+        }
+        if(!$unitfound){
+            $unitalertstyle .= " bg-warning";
+        }
         $eingred = $ingred['name'];
         $ingredalertstyle = "form-control IngredInput";
         if(in_array($eingred, $list_ingreds) == FALSE){$ingredalertstyle .= " bg-warning";}
