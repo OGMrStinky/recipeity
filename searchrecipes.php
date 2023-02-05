@@ -81,6 +81,7 @@ if($DB->error()){
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="update.php">Update</a></li>
                             <li><a class="dropdown-item" href="changepassword.php">Change Password</a></li>
+                            <li><a class="dropdown-item" href="listunits.php">Manage Units</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                         </ul>
