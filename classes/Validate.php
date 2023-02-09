@@ -1,7 +1,5 @@
 <?php
-/**
- * Created by Chris on 9/29/2014 3:57 PM.
- */
+
 
 class Validate {
     private $_passed = false;
@@ -43,6 +41,21 @@ class Validate {
 
                             if($check->count()) {
                                 $this->addError("{$item} already exists.");
+                            }
+                            break;
+                        case 'alpha':
+                            if(!preg_match("/^[a-zA-Z-' ]*$/",$value)){
+                                $this->addError("{$item} contains invalid characters");
+                            }
+                            break;
+                        case 'email':
+                            if(!filter_var($value, FILTER_VALIDATE_EMAIL)){
+                                $this->addError("{$item} contains invalid characters");
+                            }
+                            break;
+                        case 'url':
+                            if(!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$value)){
+                                $this->addError("{$item} is not a valid URL");
                             }
                             break;
                     }

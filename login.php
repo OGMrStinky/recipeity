@@ -1,100 +1,143 @@
 <?php
-/**
- * Created by Chris on 9/29/2014 3:52 PM.
- */
 
 require_once 'core/init.php';
 
-if(Input::exists()) {
+if (Input::exists()) {
     if(Token::check(Input::get('token'))) {
-
         $validate = new Validate();
-        $validate->check($_POST, array(
-            'username' => array('required' => true),
-            'password' => array('required' => true)
-        ));
-
-        if($validate->passed()) {
+		$formtype = Input::get("formtype");
+		if($formtype == "register"){
+			$validate->check($_POST, array(
+				'username' => array(
+					'name' => 'Username',
+					'required' => true,
+					'min' => 2,
+					'max' => 20,
+					'unique' => 'users',
+					'email' => true
+				),
+				'password' => array(
+					'name' => 'Password',
+					'required' => true,
+					'min' => 6
+				),
+				'password_again' => array(
+					'required' => true,
+					'matches' => 'password'
+				),
+			));
+		} else{
+			$validate->check($_POST, array(
+				'username' => array('required' => true,'email' => true),
+				'password' => array('required' => true)
+			));
+		}
+        if ($validate->passed()) {
             $user = new User();
-            $remember = (Input::get('remember') === 'on') ? true : false;
-            $login = $user->login(Input::get('username'), Input::get('password'), $remember);
+            //$salt = Hash::salt(32);
+            $salt = "";
+			if($formtype == "register"){
+				try {
+/*$user->create(array(
+						'name' => Input::get('name'),
+						'username' => Input::get('username'),
+						'password' => Hash::make(Input::get('password'), $salt),
+						'salt' => $salt,
+						'joined' => date('Y-m-d H:i:s'),
+						'group' => 1
+					));
 
-            if($login) {
-                Redirect::to('index.php');
-            } else {
-                echo '<p>Incorrect username or password</p>';
-            }
+					Session::flash('home', 'Registration Successful! Your account has been registered. You may now log in.');
+					Redirect::to('index.php');*/
+					Session::flash('home', 'Registration is currently suspended');
+					Redirect::to('index.php');
+
+				} catch(Exception $e) {
+					echo $e->getTraceAsString(), '<br>';
+				}
+			} else{
+				$user = new User();
+				$remember = (Input::get('remember') === 'on') ? true : false;
+				$login = $user->login(Input::get('username'), Input::get('password'), $remember);
+	
+				if($login) {
+					Redirect::to('index.php');
+				} else {
+					echo '<p>Incorrect username or password</p>';
+				}
+			}
         } else {
-            foreach($validate->errors() as $error) {
-                echo $error, '<br>';
+            foreach ($validate->errors() as $error) {
+                echo $error . "<br>";
             }
         }
     }
 }
+$token = Token::generate();
 ?>
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="core/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <title>Recipeity</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="row justify-content-around p-4">
-          <div class="col-md-4 p-4 border text-light bg-dark">
-            <h1 class="text-center p-4">Recipeity</h1>
-      <form action="" method="post">
-        <!-- Email input -->
-        <div class="form-outline mb-4">
-          <input type="email" name="username" id="username" class="form-control" />
-          <label class="form-label" for="username">Email address</label>
-        </div>
-      
-        <!-- Password input -->
-        <div class="form-outline mb-4">
-          <input type="password" name="password" id="password" class="form-control" />
-          <label class="form-label" for="password">Password</label>
-        </div>
-      
-        <!-- 2 column grid layout for inline styling -->
-        <div class="row mb-4">
-          <div class="col d-flex justify-content-center">
-            <!-- Checkbox -->
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value="on"
-                name="remember" id="remember"
-                
-              />
-              <label class="form-check-label" for="remember"> Remember me </label>
-            </div>
-          </div>
-      
-          <div class="col">
-
-          </div>
-        </div>
-        <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-      
-        <!-- Register buttons -->
-        <div class="text-center">
-          <p>Not a member? <a href="register.php">Register</a></p>
-
-        </div>
-      </form>
-        </div>
-      </div>
-    </div>
-    <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Recipeity</title>
+		<link rel="stylesheet" href="core/style.css">
+	</head>
+	<body>
+		<div id="bg-overlay"></div>
+		<div id="overlay"></div>
+		<div class="login-wrap">
+	<div class="login-html">
+		<div class="login-header">
+				<a href="#"><img src="core/images/Recipeity-03.png"></a>
+			</div>
+			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab" style="margin-left:26%;">Sign In</label>
+			<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Register</label>
+		<div class="login-form">
+			<form action="" method="post">
+				<div class="sign-in-htm">
+					<div class="group">
+						<label for="user" class="label">Email Address</label>
+						<input id="user" name="username" type="text" class="input">
+					</div>
+					<div class="group">
+						<label for="pass" class="label">Password</label>
+						<input id="pass" name="password" type="password" class="input" data-type="password">
+					</div>
+					<div class="group">
+						<input id="remember" name="remember" type="checkbox" class="check" checked>
+						<label for="remember"><span class="icon"></span> Keep me Signed in</label>
+					</div>
+					<input type="hidden" name="token" value="<?php echo  $token; ?>">
+					<input type="hidden" name="formtype" value="signin">
+					<div class="group">
+						<input type="submit" class="button" value="Sign In">
+					</div>
+				</div>
+			</form>
+			<form action="" method="post">
+				<div class="sign-up-htm">
+					<div class="group">
+						<label for="user" class="label">Email Address</label>
+						<input id="user" name="username" type="text" class="input">
+					</div>
+					<div class="group">
+						<label for="" class="label">Password</label>
+						<input id="pass" name="password" type="password" class="input" data-type="password">
+					</div>
+					<div class="group">
+						<label for="pass" class="label">Repeat Password</label>
+						<input id="pass" name="password_again" type="password" class="input" data-type="password">
+					</div>
+					<input type="hidden" name="token" value="<?php echo $token; ?>">
+					<input type="hidden" name="formtype" value="register">
+					<div class="group">
+						<input type="submit" class="button" value="Sign Up">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+	</body>
 </html>
