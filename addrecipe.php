@@ -4,6 +4,7 @@ require_once 'core/init.php';
 
 $user = new User();
 $recipe = new Recipe();
+$recipe_parts = array();
 
 if(!$user->isLoggedIn()) {
     Redirect::to('login.php');
@@ -167,7 +168,7 @@ if ($recipeID) {
             </div>");
         $ingredcnt += 1;
     }
-}elseif($recipe_parts['ingreds']){
+}elseif(array_key_exists('ingreds', $recipe_parts)){
     //$sql = "SELECT UnitName FROM units WHERE UserID=?";  //update to join table to itself to get aliases
     $sql = "SELECT unit.UnitName, alias.UnitName AS AliasForName FROM units unit LEFT JOIN units alias ON unit.AliasID = alias.UnitID WHERE unit.UserID=?";
     $units = $DB->query($sql, array($user->data()->id))->results();
@@ -287,7 +288,7 @@ if ($recipeID) {
     //print_r($DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
     //$recsteps = implode(PHP_EOL, $DB->action("SELECT StepText", "recipesteps", array("RecipeID", "=", $recipeID))->results());
     print("<textarea class='form-control' id='exampleFormControlTextarea1' rows=15 name='instruct' placeholder='Paste instructions here. Each step on its own line.' >{$recsteps}</textarea>");
-}elseif($recipe_parts['instructs']){
+}elseif(array_key_exists('instructs', $recipe_parts)){
     
     $recsteps = "";
     $x = 1;
