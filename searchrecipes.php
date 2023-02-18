@@ -92,32 +92,32 @@ if($DB->error()){
     </nav>
 
 <form autocomplete="off" action="" method="post" class="row row-cols-lg-auto g-3 align-items-center p-4 justify-content-md-center">
-    <div class="col-2">
+    <div>
         <label class="visually-hidden" for="RecipeName">Recipe Name</label>
         <div class="input-group">
         <input type="text" class="form-control" id="RecipeName" name="RecipeName" placeholder="Recipe Name">
         </div>
     </div>
-    <div>or</div>
-    <div class="col-2">
+    <div class="text-center">or</div>
+    <div>
         <label class="visually-hidden" for="Ingred">Ingredient</label>
         <div class="input-group">
         <input type="text" class="form-control" id="Ingred" name="Ingred" placeholder="Ingredient">
         </div>
     </div>
     <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-    <div class="col-2">
-        <button type="submit" class="btn btn-primary">Filter</button>
+    <div>
+        <button type="submit" class="btn btn-primary full">Filter</button>
     </div>
 </form>
 
 <div class="container">
-    <div class="row row-cols-4 g-4">
+    <div class="row">
 
         <?php 
             
             foreach($recipe_list as $recipe){
-                echo('<div class="col">');
+                echo('<div class="col-md-3 col-sm-6 col-xs-12 mb">');
                 echo('  <div class="card h-100">');
                 echo('      <div class="card-body">');
                 echo("          <h5 class='card-title'><a href='viewrecipe.php?recipeid={$recipe->RecipeID}'>{$recipe->RecipeName}<a/></h5>");
@@ -137,4 +137,15 @@ if($DB->error()){
 ?>
     </div>
 </div>
+<style>
+.mb{
+	margin-bottom: 19px;
+}
+.full{
+	width:100% !important;
+}
+body{
+	overflow-x: hidden;	
+}
+</style>
 <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
