@@ -123,7 +123,7 @@ if($DB->error()){
                 echo('<div class="col-md-3 col-sm-6 col-xs-12 mb">');
                 echo('  <div class="card h-100">');
                 echo('      <div class="card-body">');
-                echo("          <h5 class='card-title'>{$recipe->RecipeName}<a href='viewrecipe.php?recipeid={$recipe->RecipeID}'><span class='link-spanner'></span><a/></h5>");
+                echo("          {$recipe->RecipeName}<a href='viewrecipe.php?recipeid={$recipe->RecipeID}'><span class='link-spanner'></span><a/>");
                 echo("      </div>");
                 echo("  </div>");
                 echo("</div>");
@@ -158,5 +158,18 @@ body{
   left: 0;
   z-index: 1;
 }  
+.card{
+    background-size: cover;
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+	  border: 4px solid #ffb648;
+  	border-radius: 8px;
+}
+.card-body{
+	background-color: rgba(145, 195, 65, 0.7);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
 </style>
 <script src="core/bootstrap/bootstrap.bundle.min.js"></script>
