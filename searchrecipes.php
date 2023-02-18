@@ -52,11 +52,14 @@ if($DB->error()){
 
     <!-- Bootstrap CSS -->
     <link href="core/bootstrap/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="core/style.css">
     <title>Recipeity</title>
   </head>
 
   <body>
+    <div id="bg-overlay"></div>
+    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">Recipeity</a>
@@ -120,7 +123,7 @@ if($DB->error()){
                 echo('<div class="col-md-3 col-sm-6 col-xs-12 mb">');
                 echo('  <div class="card h-100">');
                 echo('      <div class="card-body">');
-                echo("          <h5 class='card-title'><a href='viewrecipe.php?recipeid={$recipe->RecipeID}'>{$recipe->RecipeName}<a/></h5>");
+                echo("          <h5 class='card-title'>{$recipe->RecipeName}<a href='viewrecipe.php?recipeid={$recipe->RecipeID}'><span class='link-spanner'></span><a/></h5>");
                 echo("      </div>");
                 echo("  </div>");
                 echo("</div>");
@@ -147,5 +150,13 @@ if($DB->error()){
 body{
 	overflow-x: hidden;	
 }
+.link-spanner{
+  position:absolute; 
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+  z-index: 1;
+}  
 </style>
 <script src="core/bootstrap/bootstrap.bundle.min.js"></script>

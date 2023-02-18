@@ -26,10 +26,13 @@ $token = Token::generate();
 
     <!-- Bootstrap CSS -->
     <link href="core/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="core/style.css">
     <title>Recipeity</title>
   </head>
 
   <body>
+    <div id="bg-overlay"></div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">Recipeity</a>
