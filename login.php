@@ -2,6 +2,18 @@
 
 require_once 'core/init.php';
 
+$user = new User(); //Current
+
+if($user->isLoggedIn()) {
+	$menu = new Menu($user->data()->id);
+	$menuitems = $menu->getmenu();
+	if(count($menuitems) > 0){
+		Redirect::to('viewmenu.php');
+	} else{
+		Redirect::to('searchrecipes.php');
+	}
+}
+
 if (Input::exists()) {
     if(Token::check(Input::get('token'))) {
         $validate = new Validate();

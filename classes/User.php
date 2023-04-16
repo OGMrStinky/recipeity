@@ -88,9 +88,10 @@ class User {
 
                     return true;
                 }
-                echo Hash::make($password, "");
+                /*echo Hash::make($password, "");
                 echo "should be";
-                echo $this->data()->password;
+                echo $this->data()->password;*/
+                echo "failed to login";
                 die;
             }
         }
