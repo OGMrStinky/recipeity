@@ -164,8 +164,7 @@ if ($recipeID) {
             <input type='text' value='{$eingred}' class='form-control IngredInput' name='ingIng[]' placeholder='Ingredient' aria-label='Ingredient'>
             </div>
             <div class='col-sm-2 form-check'>
-                <input type='checkbox' class='form-check-input IsDivided' name='ingIsDivided[]' id='exampleCheck1'>
-                <label class='form-check-label' for='exampleCheck1'>Divided</label>
+            <button  class='btn btn-primary btnDelIngred' type='button'>Delete</button>
             </div>
             </div>");
         $ingredcnt += 1;
@@ -239,8 +238,7 @@ die;*/
             <input type='text' value='{$eingred}' class='{$ingredalertstyle}' name='ingIng[]' placeholder='Ingredient' aria-label='Ingredient'>
             </div>
             <div class='col-sm-2 form-check'>
-                <input type='checkbox' class='form-check-input IsDivided' name='ingIsDivided[]' id='exampleCheck1'>
-                <label class='form-check-label' for='exampleCheck1'>Divided</label>
+            <button  class='btn btn-primary btnDelIngred' type='button'>Delete</button>
             </div>
             </div>");
         $ingredcnt += 1;
@@ -257,8 +255,7 @@ die;*/
         <input type="text" class="form-control IngredInput" name="ingIng[]" placeholder="Ingredient" aria-label="Ingredient">
         </div>
         <div class="col-sm-2 form-check">
-            <input type="checkbox" class="form-check-input IsDivided" name="ingIsDivided[]" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Divided</label>
+        <button  class="btn btn-primary btnDelIngred" type="button">Delete</button>
         </div>
         </div>');
 }
@@ -343,5 +340,7 @@ function ToggleBlogInput() {
     x.style.display = "none";
   }
 }
+
+
 </script>
 </html>

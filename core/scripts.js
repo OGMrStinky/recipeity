@@ -2,14 +2,21 @@
     document.getElementById('moreIngred').onclick = dupIngred;
     //document.getElementById('moreInstruct').onclick = dupInstruct;
 
+    function delIngred(evt){
+      var ing = document.getElementById(evt.currentTarget.parentNode.parentNode.id);
+      ing.remove();
+    }
 
     var i = 0;
-    var ogIngred = document.getElementById('duplicater');
 
     function dupIngred() {
-        var clone = ogIngred.cloneNode(true); // "deep" clone
-        clone.id = "duplicator" + ++i; // there can only be one element with an ID
-        ogIngred.parentNode.appendChild(clone);
+        var ingreddiv = document.getElementById('ingredscontainer');
+        i = ingreddiv.childElementCount;
+
+        var clone = ingreddiv.firstElementChild.cloneNode(true);
+        clone.id = "duplicater" + ++i; // there can only be one element with an ID
+        
+        ingreddiv.appendChild(clone);
 
         //clear values and attach autocomplete to units and ingred inputs
         var eAmnts = document.getElementsByClassName("AmntInput");
@@ -33,9 +40,15 @@
         }
         eIngreds[eIngreds.length - 1].value = "";
 
-        var eAmnts = document.getElementsByClassName("IsDivided");
-        eAmnts[eAmnts.length -1].value = i;
-        eAmnts[eAmnts.length -1].checked = false;
+        var btns = document.getElementsByClassName("btnDelIngred");
+        var btn;
+        for (btn in btns){
+            if((typeof btns[btn] === "object")){
+                btns[btn].addEventListener("click", delIngred);
+            }
+        }
+
+
     }
 
     //https://stackoverflow.com/questions/4355868/php-get-a-dynamic-number-of-html-input-fields/4355893
@@ -164,6 +177,14 @@
         if ( (typeof eIngreds[nn] === "object") ){
             autocomplete(eIngreds[nn], aIngreds);
         } 
+    }
+
+    var btns = document.getElementsByClassName("btnDelIngred");
+    var btn;
+    for (btn in btns){
+        if((typeof btns[btn] === "object")){
+            btns[btn].addEventListener("click", delIngred);
+        }
     }
     //autocomplete(document.getElementById("Units"), aUnits);
     //autocomplete(document.getElementById("Ingred"), aIngreds);
